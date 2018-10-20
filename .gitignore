@@ -2,3 +2,5 @@
 */bin/
 *.csproj
 *.csproj.user
+*.vs/
+*.sln
