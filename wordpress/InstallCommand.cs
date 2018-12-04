@@ -7,12 +7,10 @@ using System.Net;
 
 namespace wordpress
 {
+
     internal class InstallCommand : ICommand
     {
         private List<string> domains;
-        private static string virtualHostsConfFile = @"C:\xampp\apache\conf\extra\httpd-vhosts.conf";
-        private static string hostsFile = @"C:\Windows\System32\drivers\etc\hosts";
-        private static string xamppPath = @"C:\xampp\htdocs\";
 
 
         public InstallCommand(List<string> args)
@@ -46,8 +44,8 @@ namespace wordpress
             foreach (string domain in domains)
             {
                 Console.WriteLine();
-                Console.WriteLine("> Domain {0}/{1}: {2}", i, domains.Count, domain);
-                domainDirectory = xamppPath + domain;
+                Console.WriteLine("> Domain {0}/{1}: {2}", i++, domains.Count, domain);
+                domainDirectory = Globals.xamppPath + domain;
 
                 Console.WriteLine();
                 Console.WriteLine("Extraction started");
@@ -63,14 +61,14 @@ namespace wordpress
                 Directory.Move(wordpressDirectory, domainDirectory);
                 Console.WriteLine("Moving completed");
 
-                using (StreamWriter w = File.AppendText(virtualHostsConfFile))
+                using (StreamWriter w = File.AppendText(Globals.virtualHostsConfFile))
                 {
                     CreateVirtualHost(domainDirectory, domain, w);
                 }
 
                 int lastIP = GetLastIP();
 
-                using (StreamWriter w = File.AppendText(hostsFile))
+                using (StreamWriter w = File.AppendText(Globals.hostsFile))
                 {
                     CreateLocalhostResoltion(lastIP, domain, w);
                 }
@@ -91,20 +89,20 @@ namespace wordpress
             w.WriteLine("");
             w.WriteLine("<VirtualHost *:80>");
             w.WriteLine("\tDocumentRoot\t\"{0}\"", domainPath);
-            w.WriteLine("\tServerName\t\t{0}.dev", domainName);
-            w.WriteLine("\tServerAlias\t\twww.{0}.dev", domainName);
+            w.WriteLine("\tServerName\t\t{0}.test", domainName);
+            w.WriteLine("\tServerAlias\t\twww.{0}.test", domainName);
             w.WriteLine("</VirtualHost>");
             Console.WriteLine("Virtual host created");
         }
 
         public static void CreateLocalhostResoltion(int lastIP, string domainName, TextWriter w)
         {
-            w.WriteLine("127.0.{0}.1\t{1}.dev", lastIP+1, domainName);
+            w.WriteLine("127.0.{0}.1\t{1}.test", lastIP+1, domainName);
         }
 
         public static int GetLastIP()
         {
-            var lastLine = File.ReadLines(hostsFile).Last();
+            var lastLine = File.ReadLines(Globals.hostsFile).Last();
             string ip = lastLine.Split(' ').ToList().First();
             return Int32.Parse(ip.Split('.').ToList().ElementAt(2));
         }
