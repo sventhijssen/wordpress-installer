@@ -76,6 +76,21 @@ namespace wordpress
                 Usage = "install [DOMAIN...]",
                 Description = "Installs Wordpress on a locally created domain [DOMAIN]. Multiple domains can be created at once, e.g. \"install test1 test2\"",
                 Flags = new Flag[] {}
+            },
+            new Command
+            {
+                ShortName = "uninstall",
+                LongName = "",
+                Usage = "uninstal [DOMAIN...]",
+                Description = "Uninstalls the local domain, removes it from the hosts file and virtual hosts, e.g. \"uninstall test1 test2 \"",
+                Flags = new Flag[] {}
+            },
+            new Command {
+                ShortName = "add",
+                LongName = "",
+                Usage = "add DOMAIN [PLUGIN...]",
+                Description = "Adds the list of plugins to the local domain, e.g. \"add test plugin1 plugin2 \"",
+                Flags = new Flag[] {}
             }
         };
     }

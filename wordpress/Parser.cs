@@ -22,6 +22,8 @@ namespace wordpress
                 case "clear": return new ClearCommand();
                 case "license": return new LicenseCommand();
                 case "install": return new InstallCommand(args);
+                case "uninstall": return new UninstallCommand(args);
+                case "add": return new AddPluginCommand(args);
                 default:
                     return new DefaultCommand();
             }
